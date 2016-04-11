@@ -6,6 +6,6 @@ public class Start {
 		Game game = new Game();
 		// String test = "A1";
 		// System.out.println(test.substring(1));
-
+		//test
 	}
 }

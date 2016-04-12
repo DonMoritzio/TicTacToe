@@ -13,13 +13,15 @@ public class Game {
 	private String move;
 	String instruction;
 	boolean instructionValid;
+	Highscore score;
 
 	// Eine 0 auf dem Spielfeld bedeutet, dass noch nichts gesetzt wurde
 	// Eine 1 auf dem Spielfeld bedeutet, dass Kreuz gesetzt wurde
 	// Eine -1 auf dem Spielfeld bedeutet, dass Kreis gesetzt wurde
 
-	public Game(Scanner input) {
+	public Game(Scanner input, Highscore score) {
 		inputNames(input);
+		this.score = score;
 		isTurnPlayerX = getRandomBoolean();
 		while (session) {
 			gameover = false;
@@ -36,14 +38,14 @@ public class Game {
 					System.out.println(namePlayerO + ", Du bist an der Reihe:");
 				}
 				// Testeingabe
-//				field[0][3] = 1;
-//				turn++;
-//				field[1][2] = 1;
-//				turn++;
-//				field[2][1] = 1;
-//				turn++;
-//				field[3][0] = 1;
-//				turn++;
+				// field[0][3] = 1;
+				// turn++;
+				// field[1][2] = 1;
+				// turn++;
+				// field[2][1] = 1;
+				// turn++;
+				// field[3][0] = 1;
+				// turn++;
 				// field[2][0] = 1;
 				// field[3][0] = 1;
 				outputField();
@@ -78,6 +80,15 @@ public class Game {
 				}
 			}
 		}
+	}
+
+	private void addToScore(){
+		HighscoreEntry e = new HighscoreEntry(winningPlayer(), 10, turn);
+		score.addEntry(e);
+	}
+	
+	public Highscore getHighscore(){
+		return score;
 	}
 
 	private void initializeField() {
@@ -159,17 +170,20 @@ public class Game {
 	}
 
 	private void winMessage() {
-		String player = "";
+		drawLine();
+		System.out.println("### HERZLICHEN GLÜCKWUNSCH " + winningPlayer().toUpperCase() + " DU HAST GEWONNEN! ###");
+		//Part missing
+		drawLine();
+	}
+
+	private String winningPlayer() {
 		if (gameover && isTurnPlayerX) {
-			player = namePlayerX;
-
+			return namePlayerX;
 		} else if (gameover && !isTurnPlayerX) {
-			player = namePlayerO;
-
+			return namePlayerO;
+		} else {
+			return "";
 		}
-		drawLine();
-		System.out.println("### HERZLICHEN GLÜCKWUNSCH " + player.toUpperCase() + " DU HAST GEWONNEN! ###");
-		drawLine();
 	}
 
 	private void inputMove(Scanner input) {
@@ -181,7 +195,7 @@ public class Game {
 		drawLine();
 	}
 
-	private void drawLine() {
+	public static void drawLine() {
 		System.out.println("---------------------------------------------------------------");
 	}
 

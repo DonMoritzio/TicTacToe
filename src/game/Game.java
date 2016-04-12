@@ -6,47 +6,78 @@ public class Game {
 	private String namePlayerX = "XX";
 	private String namePlayerO = "OO";
 	private boolean isTurnPlayerX; //
-	private boolean gameover = false;
+	private boolean gameover;
+	private boolean session = true;
 	private int[][] field = new int[4][4];
 	private int turn = 0;
 	private String move;
+	String instruction;
+	boolean instructionValid;
+
 	// Eine 0 auf dem Spielfeld bedeutet, dass noch nichts gesetzt wurde
 	// Eine 1 auf dem Spielfeld bedeutet, dass Kreuz gesetzt wurde
 	// Eine -1 auf dem Spielfeld bedeutet, dass Kreis gesetzt wurde
 
-	public Game() {
-		Scanner input = new Scanner(System.in);
-		initializeField(); // Das Spielfeld wird mit Nullen aufgefÃ¼llt.
-		// inputNames(input);
+	public Game(Scanner input) {
+		inputNames(input);
 		isTurnPlayerX = getRandomBoolean();
-		// System.out.println(namePlayerX + " " + namePlayerO + " " +
-		// isTurnPlayerX);
-		while (!gameover) {
-			turn++;
-			if (isTurnPlayerX) {
-				System.out.println(namePlayerX + ", Du bist an der Reihe:");
-			} else {
-				System.out.println(namePlayerO + ", Du bist an der Reihe:");
-			}
-			//Testeingabe
-			field[0][0] = 1; turn++;
-			field[0][1] = -1; turn++;
-			field[1][0] = 1; turn++;
-			//field[2][0] = 1;
-			// field[3][0] = 1;
-			outputField();
-			inputMove(input);
+		while (session) {
+			gameover = false;
+			initializeField(); // Das Spielfeld wird mit Nullen aufgefÃ¼llt.
+			System.out.println("\nDAS SPIEL BEGINNT...\n");
+			// System.out.println(namePlayerX + " " + namePlayerO + " " +
+			// isTurnPlayerX);
+			while (!gameover) {
+				turn++;
 
-			check();
-
-			isTurnPlayerX = !isTurnPlayerX;
-			if (turn >= 15) {
-				gameover = true;
+				if (isTurnPlayerX) {
+					System.out.println(namePlayerX + ", Du bist an der Reihe:");
+				} else {
+					System.out.println(namePlayerO + ", Du bist an der Reihe:");
+				}
+				// Testeingabe
+//				field[0][3] = 1;
+//				turn++;
+//				field[1][2] = 1;
+//				turn++;
+//				field[2][1] = 1;
+//				turn++;
+//				field[3][0] = 1;
+//				turn++;
+				// field[2][0] = 1;
+				// field[3][0] = 1;
 				outputField();
-				System.out.println("Unentschieden");
+				inputMove(input);
+
+				check();
+
+				isTurnPlayerX = !isTurnPlayerX;
+				if (turn >= 15) {
+					gameover = true;
+					outputField();
+					System.out.println("Unentschieden");
+				}
+			}
+
+			instructionValid = false;
+			while (!instructionValid) {
+				System.out.println("\nMöchtet Ihr [R] eine Revanche [N] ein Neues Spiel oder [B] Beenden:");
+				instruction = input.next().toUpperCase();
+				if (instruction.equals("B")) {
+					instructionValid = true;
+					input.close();
+					System.exit(0);
+				} else if (instruction.equals("N")) {
+					instructionValid = true;
+					session = false;
+				} else if (instruction.equals("R")) {
+					instructionValid = true;
+					// System.out.println("Test");
+				} else {
+					System.out.println("Ungültige Eingabe");
+				}
 			}
 		}
-		input.close();
 	}
 
 	private void initializeField() {
@@ -71,11 +102,10 @@ public class Game {
 					break;
 				}
 				if (j >= 3) {
-					//System.out.println("GewonnenHor");
+					// System.out.println("GewonnenHor");
 					gameover = true;
 					outputField();
 					winMessage();
-					
 				}
 			}
 		}
@@ -92,22 +122,54 @@ public class Game {
 					break;
 				}
 				if (j >= 3) {
-					//System.out.println("GewonnenVertical" + i + " " + j);
+					// System.out.println("GewonnenVertical" + i + " " + j);
 					gameover = true;
 					outputField();
 					winMessage();
-					
+
+				}
+			}
+		}
+		// diagonal
+		if (field[0][0] != 0) {
+			for (int j = 1; j < 4; j++) {
+				if (field[0][0] != field[j][j]) {
+					break;
+				}
+				if (j >= 3) {
+					gameover = true;
+					outputField();
+					winMessage();
+				}
+			}
+
+		}
+		if (field[0][3] != 0) {
+			for (int j = 1; j < 4; j++) {
+				if (field[0][3] != field[j][3 - j]) {
+					break;
+				}
+				if (j >= 3) {
+					gameover = true;
+					outputField();
+					winMessage();
 				}
 			}
 		}
 	}
 
 	private void winMessage() {
+		String player = "";
 		if (gameover && isTurnPlayerX) {
-			System.out.println(namePlayerX + ", Du hast das Spiel gewonnen!");
+			player = namePlayerX;
+
 		} else if (gameover && !isTurnPlayerX) {
-			System.out.println(namePlayerO + ", Du hast das Spiel gewonnen!");
+			player = namePlayerO;
+
 		}
+		drawLine();
+		System.out.println("### HERZLICHEN GLÜCKWUNSCH " + player.toUpperCase() + " DU HAST GEWONNEN! ###");
+		drawLine();
 	}
 
 	private void inputMove(Scanner input) {
@@ -116,8 +178,11 @@ public class Game {
 			System.out.print("\nBitte gib deinen Zug ein: ");
 			move = input.next();
 		} while (!validMove(move));
-		System.out.println("---------------------------------------");
+		drawLine();
+	}
 
+	private void drawLine() {
+		System.out.println("---------------------------------------------------------------");
 	}
 
 	private boolean validMove(String move) {
@@ -128,7 +193,8 @@ public class Game {
 				letter = move.substring(0, 1).toLowerCase();
 				j = Integer.parseInt(move.substring(1)) - 1;
 			} catch (NumberFormatException e) {
-				System.out.println("UngÃ¼ltiger Zug!");
+				System.out.println("Ungültiger Zug!");
+				drawLine();
 				return false;
 			}
 			int i = -1;
@@ -159,7 +225,8 @@ public class Game {
 				return true;
 			}
 		}
-		System.out.println("UngÃ¼ltiger Zug!");
+		System.out.println("Ungültiger Zug!");
+		drawLine();
 		return false;
 
 	}
@@ -169,7 +236,7 @@ public class Game {
 		namePlayerX = input.next();
 		System.out.print("Bitte gebe den Namen von Kreis ein: ");
 		namePlayerO = input.next();
-		System.out.println("DAS SPIEL BEGINNT...");
+
 	}
 
 	private boolean getRandomBoolean() {

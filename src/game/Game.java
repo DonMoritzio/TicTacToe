@@ -20,13 +20,14 @@ public class Game {
 
 	public Game(Scanner input) {
 		inputNames(input);
-		isTurnPlayerX = getRandomBoolean();
+		isTurnPlayerX = getRandomBoolean(); // Startspieler wird zufÃ¤llig
+											// ausgewÃ¤hlt
 		while (session) {
+			// Eine Session besteht aus den gleichen Spielern, kann aber mehrer
+			// Spiele beinhalten.
 			gameover = false;
 			initializeField(); // Das Spielfeld wird mit Nullen aufgefÃ¼llt.
 			System.out.println("\nDAS SPIEL BEGINNT...\n");
-			// System.out.println(namePlayerX + " " + namePlayerO + " " +
-			// isTurnPlayerX);
 			while (!gameover) {
 				turn++;
 
@@ -36,14 +37,14 @@ public class Game {
 					System.out.println(namePlayerO + ", Du bist an der Reihe:");
 				}
 				// Testeingabe
-//				field[0][3] = 1;
-//				turn++;
-//				field[1][2] = 1;
-//				turn++;
-//				field[2][1] = 1;
-//				turn++;
-//				field[3][0] = 1;
-//				turn++;
+				// field[0][3] = 1;
+				// turn++;
+				// field[1][2] = 1;
+				// turn++;
+				// field[2][1] = 1;
+				// turn++;
+				// field[3][0] = 1;
+				// turn++;
 				// field[2][0] = 1;
 				// field[3][0] = 1;
 				outputField();
@@ -53,15 +54,18 @@ public class Game {
 
 				isTurnPlayerX = !isTurnPlayerX;
 				if (turn >= 15) {
+					// Wenn alle Felder belegt sind und es keinen Gewinner gibt
+					// -> unentschieden
 					gameover = true;
 					outputField();
 					System.out.println("Unentschieden");
 				}
 			}
-
+			// Wenn das Spiel beendet ist, wird Interaktion vom Spieler
+			// gefordert.
 			instructionValid = false;
 			while (!instructionValid) {
-				System.out.println("\nMöchtet Ihr [R] eine Revanche [N] ein Neues Spiel oder [B] Beenden:");
+				System.out.println("\nMÃ¶chtet Ihr [R] eine Revanche [N] ein Neues Spiel oder [B] Beenden:");
 				instruction = input.next().toUpperCase();
 				if (instruction.equals("B")) {
 					instructionValid = true;
@@ -72,9 +76,8 @@ public class Game {
 					session = false;
 				} else if (instruction.equals("R")) {
 					instructionValid = true;
-					// System.out.println("Test");
 				} else {
-					System.out.println("Ungültige Eingabe");
+					System.out.println("UngÃ¼ltige Eingabe");
 				}
 			}
 		}
@@ -92,17 +95,14 @@ public class Game {
 		// horizontal
 		for (int i = 0; i < 4; i++) {
 			if (field[i][0] == 0) {
-				// System.out.println("Continue auf " + i);
 				continue;
 
 			}
 			for (int j = 1; j < 4; j++) {
 				if (field[i][0] != field[i][j]) {
-					// System.out.println("Horbreak " + j);
 					break;
 				}
 				if (j >= 3) {
-					// System.out.println("GewonnenHor");
 					gameover = true;
 					outputField();
 					winMessage();
@@ -113,16 +113,13 @@ public class Game {
 		// vertical
 		for (int i = 0; i < 4; i++) {
 			if (field[0][i] == 0) {
-				// System.out.println("VerContinue auf " + i);
 				continue;
 			}
 			for (int j = 1; j < 4; j++) {
 				if (field[0][i] != field[j][i]) {
-					// System.out.println("Verbreak " + j);
 					break;
 				}
 				if (j >= 3) {
-					// System.out.println("GewonnenVertical" + i + " " + j);
 					gameover = true;
 					outputField();
 					winMessage();
@@ -168,12 +165,11 @@ public class Game {
 
 		}
 		drawLine();
-		System.out.println("### HERZLICHEN GLÜCKWUNSCH " + player.toUpperCase() + " DU HAST GEWONNEN! ###");
+		System.out.println("### HERZLICHEN GLÃœCKWUNSCH " + player.toUpperCase() + " DU HAST GEWONNEN! ###");
 		drawLine();
 	}
 
 	private void inputMove(Scanner input) {
-
 		do {
 			System.out.print("\nBitte gib deinen Zug ein: ");
 			move = input.next();
@@ -193,7 +189,7 @@ public class Game {
 				letter = move.substring(0, 1).toLowerCase();
 				j = Integer.parseInt(move.substring(1)) - 1;
 			} catch (NumberFormatException e) {
-				System.out.println("Ungültiger Zug!");
+				System.out.println("UngÃ¼ltiger Zug!");
 				drawLine();
 				return false;
 			}
@@ -225,7 +221,7 @@ public class Game {
 				return true;
 			}
 		}
-		System.out.println("Ungültiger Zug!");
+		System.out.println("UngÃ¼ltiger Zug!");
 		drawLine();
 		return false;
 

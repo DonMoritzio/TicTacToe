@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Start {
 
 	public static void main(String[] args) {
+		//test
 		Scanner input = new Scanner(System.in);
 		Highscore highscore = new Highscore();
 		highscore.readHighscore();
@@ -20,7 +21,7 @@ public class Start {
 				highscore.saveHighscore();
 				System.exit(0);
 			} else {
-				System.out.println("Ungültige Eingabe\n");
+				System.out.println("Ungï¿½ltige Eingabe\n");
 			}
 		}
 	}

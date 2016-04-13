@@ -11,9 +11,9 @@ public class Game {
 	private int[][] field = new int[4][4];
 	private int turn = 0;
 	private String move;
-	String instruction;
-	boolean instructionValid;
-	Highscore score;
+	private String instruction;
+	private boolean instructionValid;
+	private Highscore score;
 
 	// Eine 0 auf dem Spielfeld bedeutet, dass noch nichts gesetzt wurde
 	// Eine 1 auf dem Spielfeld bedeutet, dass Kreuz gesetzt wurde
@@ -40,18 +40,18 @@ public class Game {
 					System.out.println(namePlayerO + ", Du bist an der Reihe:");
 				}
 				// Testeingabe
-				// field[0][3] = 1;
-				// turn++;
-				// field[1][2] = 1;
-				// turn++;
-				// field[2][1] = 1;
-				// turn++;
-				// field[3][0] = 1;
-				// turn++;
+				field[0][3] = 1;
+				turn++;
+				field[1][2] = 1;
+				turn++;
+				field[2][1] = 1;
+				turn++;
+				field[3][0] = 1;
+				turn++;
 				// field[2][0] = 1;
 				// field[3][0] = 1;
 				outputField();
-				inputMove(input);
+				// inputMove(input);
 
 				check();
 
@@ -86,12 +86,7 @@ public class Game {
 		}
 	}
 
-	private void addToScore(){
-		HighscoreEntry e = new HighscoreEntry(winningPlayer(), 10, turn);
-		score.addEntry(e);
-	}
-	
-	public Highscore getHighscore(){
+	public Highscore getHighscore() {
 		return score;
 	}
 
@@ -169,9 +164,35 @@ public class Game {
 
 	private void winMessage() {
 		drawLine();
-		System.out.println("### HERZLICHEN GL�CKWUNSCH " + winningPlayer().toUpperCase() + " DU HAST GEWONNEN! ###");
-		//Part missing
+		System.out.println("### HERZLICHEN GLÜCKWUNSCH " + winningPlayer().toUpperCase() + " DU HAST GEWONNEN! ###");
 		drawLine();
+		updateScore();
+	}
+
+	public void updateScore() {
+		String winner = winningPlayer();
+		for (int i = 0; i < score.size(); i++) {
+			System.out.println("Test " + i);
+			if (score.getElem(i).getName().equals(winner)) {
+				int w = score.getElem(i).getWins();
+				w++;
+				int m = score.getElem(i).getMoves();
+				m += turn;
+				score.deleteElem(i);
+				HighscoreEntry e = new HighscoreEntry(winner, w, m);
+				score.addEntry(e);
+				if (i > 0) {
+					drawLine();
+					System.out.println("### GLÜCKWUNSCH DU HAST DEN HIGHSCORE GEKNACKT ###");
+					drawLine();
+				}
+			} else if (i == score.size() - 1) {
+				System.out.println("was ne scheie");
+				HighscoreEntry e = new HighscoreEntry(winner, 1, turn);
+				score.addEntry(e);
+			}
+		}
+		score.printHighscore();
 	}
 
 	private String winningPlayer() {
@@ -227,7 +248,7 @@ public class Game {
 				break;
 			}
 			// System.out.println(i+" "+j);
-			if (i < 4 && j < 4 && field[i][j] == 0) {
+			if (i >= 0 && i < 4 && j < 4 && field[i][j] == 0) {
 				if (isTurnPlayerX) {
 					field[i][j] = 1;
 				} else {

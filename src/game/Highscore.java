@@ -15,6 +15,21 @@ public class Highscore {
 		list = new LinkedList<HighscoreEntry>();
 	}
 
+	public int size() {
+		return list.size();
+	}
+
+	public HighscoreEntry getElem(int index) {
+		return list.get(index);
+	}
+
+	// public void update(HighscoreEntry e){
+	// if(list.contains(e));
+	// }
+	public void deleteElem(int index) {
+		list.remove(index);
+	}
+
 	public void addEntry(HighscoreEntry e) {
 		if (list.size() == 0) {
 			list.add(e);
@@ -36,7 +51,7 @@ public class Highscore {
 	}
 
 	public void printHighscore() {
-		System.out.format("%8s %20s %8s %8s \r\n", "Platz", "Name", "Siege", "Züge");
+		System.out.format("%8s %20s %8s %8s \r\n", "Platz", "Name", "Siege", "ZÃ¼ge");
 		int s = list.size();
 		if (s >= 10) {
 			s = 10;
@@ -54,7 +69,8 @@ public class Highscore {
 			FileWriter fileWriter = new FileWriter(fileName);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			for (int i = 0; i < list.size(); i++) {
-				bufferedWriter.write(list.get(i).getName() + "\t" + list.get(i).getWins() + "\t" + list.get(i).getMoves());
+				bufferedWriter
+						.write(list.get(i).getName() + "\t" + list.get(i).getWins() + "\t" + list.get(i).getMoves());
 				bufferedWriter.newLine();
 			}
 			bufferedWriter.close();

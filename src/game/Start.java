@@ -21,7 +21,7 @@ public class Start {
 				highscore.saveHighscore();
 				System.exit(0);
 			} else {
-				System.out.println("Ung�ltige Eingabe\n");
+				System.out.println("Ungültige Eingabe\n");
 			}
 		}
 	}

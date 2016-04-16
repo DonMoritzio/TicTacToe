@@ -36,7 +36,6 @@ public class Highscore {
 		}
 		int j = list.size();
 		for (int i = 0; i < j; i++) {
-			System.out.println(i + " " + j);
 			if (list.get(i).getWins() < e.getWins()) {
 				list.add(i, e);
 				break;

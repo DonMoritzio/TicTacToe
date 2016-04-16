@@ -14,8 +14,6 @@ public class Start {
 			String instruction = input.next().toUpperCase();
 			if (instruction.equals("H")) {
 				highscore.printHighscore();
-				highscore.addEntry(new HighscoreEntry("hey", 1, 10));
-				highscore.printHighscore();
 			} else if (instruction.equals("S")) {
 				Game game = new Game(input, highscore);
 				highscore = game.getHighscore();

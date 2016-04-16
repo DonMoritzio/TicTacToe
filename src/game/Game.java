@@ -22,14 +22,14 @@ public class Game {
 	public Game(Scanner input, Highscore score) {
 		inputNames(input);
 		this.score = score;
-		isTurnPlayerX = getRandomBoolean(); // Startspieler wird zufällig
-											// ausgewählt
+		isTurnPlayerX = getRandomBoolean(); // Startspieler wird zufÃ¤llig
+											// ausgewÃ¤hlt
 
 		while (session) {
 			// Eine Session besteht aus den gleichen Spielern, kann aber mehrer
 			// Spiele beinhalten.
 			gameover = false;
-			initializeField(); // Das Spielfeld wird mit Nullen aufgefüllt.
+			initializeField(); // Das Spielfeld wird mit Nullen aufgefÃ¼llt.
 			System.out.println("\nDAS SPIEL BEGINNT...\n");
 			while (!gameover) {
 				turn++;
@@ -172,10 +172,8 @@ public class Game {
 	public void updateScore() {
 		String winner = winningPlayer();
 		for (int i = 0; i < score.size(); i++) {
-			System.out.println("Test " + i);
 			if (score.getElem(i).getName().equals(winner)) {
 				int w = score.getElem(i).getWins();
-				System.out.println("help");
 				w++;
 				int m = score.getElem(i).getMoves();
 				m += turn;
@@ -188,9 +186,9 @@ public class Game {
 					drawLine();
 				}
 			} else if (i == score.size() - 1) {
-				System.out.println("was ne scheie");
 				HighscoreEntry e = new HighscoreEntry(winner, 1, turn);
 				score.addEntry(e);
+				break;
 			}
 		}
 		score.printHighscore();

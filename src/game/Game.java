@@ -24,10 +24,10 @@ public class Game {
 		this.input = input;
 		this.score = score;
 		inputNames(input);
-		
+
 		isTurnPlayerX = getRandomBoolean();
 		// Startspieler wird zufällig ausgewählt
-		
+
 		run();
 	}
 
@@ -35,13 +35,13 @@ public class Game {
 		while (session) {
 			// Eine Session besteht aus den gleichen Spielern, kann aber mehrere
 			// Spiele beinhalten.
-			
+
 			gameover = false;
 			turn = 0;
-			
-			initializeField(); 
+
+			initializeField();
 			// Das Spielfeld wird mit Nullen aufgefüllt.
-			
+
 			System.out.println("\nDAS SPIEL BEGINNT...\n");
 			while (!gameover) {
 				turn++;
@@ -52,20 +52,19 @@ public class Game {
 					System.out.println(namePlayerO + ", Du bist an der Reihe:");
 				}
 				// Testeingabe
-				field[0][3] = 1;
-				turn++;
-				field[1][2] = 1;
-				turn++;
-				field[2][1] = 1;
-				turn++;
-				field[3][0] = 1;
-				turn++;
+				// field[0][3] = 1;
+				// turn++;
+				// field[1][2] = 1;
+				// turn++;
+				// field[2][1] = 1;
+				// turn++;
+				// field[3][0] = 1;
+				// turn++;
 				// field[2][0] = 1;
 				// field[3][0] = 1;
-				
-				
+
 				outputField();
-				// inputMove(input);
+				inputMove(input);
 
 				check();
 				// Überprüft, ob Spiel gewonnen
@@ -123,7 +122,7 @@ public class Game {
 		for (int i = 0; i < 4; i++) {
 			if (field[i][0] == 0) {
 				continue;
-				// Wenn im ersten Feld nichts gesetzt wird, ist in dieser 
+				// Wenn im ersten Feld nichts gesetzt wird, ist in dieser
 				// Reihe kein Gewinn mehr möglich
 			}
 			for (int j = 1; j < 4; j++) {
@@ -146,7 +145,7 @@ public class Game {
 		for (int i = 0; i < 4; i++) {
 			if (field[0][i] == 0) {
 				continue;
-				// Wenn im ersten Feld nichts gesetzt wird, ist in dieser 
+				// Wenn im ersten Feld nichts gesetzt wird, ist in dieser
 				// Spalte kein Gewinn mehr möglich
 			}
 			for (int j = 1; j < 4; j++) {

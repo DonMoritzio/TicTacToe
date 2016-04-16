@@ -14,23 +14,34 @@ public class Game {
 	private String instruction;
 	private boolean instructionValid;
 	private Highscore score;
+	private Scanner input;
 
 	// Eine 0 auf dem Spielfeld bedeutet, dass noch nichts gesetzt wurde
 	// Eine 1 auf dem Spielfeld bedeutet, dass Kreuz gesetzt wurde
 	// Eine -1 auf dem Spielfeld bedeutet, dass Kreis gesetzt wurde
 
 	public Game(Scanner input, Highscore score) {
-		inputNames(input);
+		this.input = input;
 		this.score = score;
-		isTurnPlayerX = getRandomBoolean(); // Startspieler wird zufällig
-											// ausgewählt
+		inputNames(input);
+		
+		isTurnPlayerX = getRandomBoolean();
+		// Startspieler wird zufällig ausgewählt
+		
+		run();
+	}
 
+	public void run() {
 		while (session) {
-			// Eine Session besteht aus den gleichen Spielern, kann aber mehrer
+			// Eine Session besteht aus den gleichen Spielern, kann aber mehrere
 			// Spiele beinhalten.
+			
 			gameover = false;
 			turn = 0;
-			initializeField(); // Das Spielfeld wird mit Nullen aufgefüllt.
+			
+			initializeField(); 
+			// Das Spielfeld wird mit Nullen aufgefüllt.
+			
 			System.out.println("\nDAS SPIEL BEGINNT...\n");
 			while (!gameover) {
 				turn++;
@@ -51,10 +62,13 @@ public class Game {
 				turn++;
 				// field[2][0] = 1;
 				// field[3][0] = 1;
+				
+				
 				outputField();
 				// inputMove(input);
 
 				check();
+				// Überprüft, ob Spiel gewonnen
 
 				isTurnPlayerX = !isTurnPlayerX;
 				if (turn >= 15) {
@@ -69,7 +83,7 @@ public class Game {
 			// gefordert.
 			instructionValid = false;
 			while (!instructionValid) {
-				System.out.println("\nMöchtet Ihr [R] eine Revanche [N] ein Neues Spiel oder [B] Beenden:");
+				System.out.println("\nMöchtet Ihr eine Revanche [R] ein Neues Spiel [N] oder Beenden [B]?");
 				instruction = input.next().toUpperCase();
 				if (instruction.equals("B")) {
 					instructionValid = true;
@@ -96,6 +110,7 @@ public class Game {
 	}
 
 	private void initializeField() {
+		// Alle Felder werden auf 0 gesetzt.
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field.length; j++) {
 				field[i][j] = 0;
@@ -108,13 +123,18 @@ public class Game {
 		for (int i = 0; i < 4; i++) {
 			if (field[i][0] == 0) {
 				continue;
-
+				// Wenn im ersten Feld nichts gesetzt wird, ist in dieser 
+				// Reihe kein Gewinn mehr möglich
 			}
 			for (int j = 1; j < 4; j++) {
 				if (field[i][0] != field[i][j]) {
 					break;
+					// Wenn auf den folgenden Feldern nicht das gleiche Symbol
+					// liegt, ist auch kein Gewinn in der Reihe mehr möglich
 				}
 				if (j >= 3) {
+					// Wenn alle vier Felder in der Reihe das gleiche Symbol
+					// haben, hat ein Spieler gewonnen.
 					gameover = true;
 					outputField();
 					winMessage();
@@ -122,16 +142,22 @@ public class Game {
 			}
 		}
 
-		// vertical
+		// vertikal
 		for (int i = 0; i < 4; i++) {
 			if (field[0][i] == 0) {
 				continue;
+				// Wenn im ersten Feld nichts gesetzt wird, ist in dieser 
+				// Spalte kein Gewinn mehr möglich
 			}
 			for (int j = 1; j < 4; j++) {
 				if (field[0][i] != field[j][i]) {
 					break;
+					// Wenn auf den folgenden Feldern nicht das gleiche Symbol
+					// liegt, ist auch kein Gewinn in der Spalte mehr möglich
 				}
 				if (j >= 3) {
+					// Wenn alle vier Felder in der Spalte das gleiche Symbol
+					// haben, hat ein Spieler gewonnen.
 					gameover = true;
 					outputField();
 					winMessage();
@@ -139,13 +165,19 @@ public class Game {
 				}
 			}
 		}
-		// diagonal
+		// diagonal Nr. 1
 		if (field[0][0] != 0) {
+			// Wenn das Feld links-oben nicht besetzt ist, ist diagonal
+			// kein Gewinn mehr möglich
 			for (int j = 1; j < 4; j++) {
 				if (field[0][0] != field[j][j]) {
 					break;
+					// Wenn auf den folgenden Feldern nicht das gleiche Symbol
+					// liegt, ist auch kein Gewinn in der Diagonale mehr möglich
 				}
 				if (j >= 3) {
+					// Wenn alle vier Felder in der Diagonale das gleiche Symbol
+					// haben, hat ein Spieler gewonnen.
 					gameover = true;
 					outputField();
 					winMessage();
@@ -153,12 +185,19 @@ public class Game {
 			}
 
 		}
+		// diagonal Nr. 2
 		if (field[0][3] != 0) {
+			// Wenn das Feld rechts-oben nicht besetzt ist, ist diagonal
+			// kein Gewinn mehr möglich
 			for (int j = 1; j < 4; j++) {
 				if (field[0][3] != field[j][3 - j]) {
 					break;
+					// Wenn auf den folgenden Feldern nicht das gleiche Symbol
+					// liegt, ist auch kein Gewinn in der Diagonale mehr möglich
 				}
 				if (j >= 3) {
+					// Wenn alle vier Felder in der Diagonale das gleiche Symbol
+					// haben, hat ein Spieler gewonnen.
 					gameover = true;
 					outputField();
 					winMessage();

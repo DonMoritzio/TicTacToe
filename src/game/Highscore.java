@@ -22,10 +22,9 @@ public class Highscore {
 	public HighscoreEntry getElem(int index) {
 		return list.get(index);
 	}
-
-	// public void update(HighscoreEntry e){
-	// if(list.contains(e));
-	// }
+	public int indexOf(HighscoreEntry e){
+		return list.indexOf(e);
+	}
 	public void deleteElem(int index) {
 		list.remove(index);
 	}
@@ -33,20 +32,20 @@ public class Highscore {
 	public void addEntry(HighscoreEntry e) {
 		if (list.size() == 0) {
 			list.add(e);
-		}
-		int j = list.size();
-		for (int i = 0; i < j; i++) {
-			if (list.get(i).getWins() < e.getWins()) {
-				list.add(i, e);
-				break;
-			} else if (list.get(i).getWins() == e.getWins() && list.get(i).getMoves() > e.getMoves()) {
-				list.add(i, e);
-				break;
-			} else if (i == list.size() - 1) {
-				list.add(e);
+		} else {
+			int j = list.size();
+			for (int i = 0; i < j; i++) {
+				if (list.get(i).getWins() < e.getWins()) {
+					list.add(i, e);
+					break;
+				} else if (list.get(i).getWins() == e.getWins() && list.get(i).getMoves() > e.getMoves()) {
+					list.add(i, e);
+					break;
+				} else if (i == list.size() - 1) {
+					list.add(e);
+				}
 			}
 		}
-
 	}
 
 	public void printHighscore() {

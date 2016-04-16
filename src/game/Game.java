@@ -9,7 +9,7 @@ public class Game {
 	private boolean gameover;
 	private boolean session = true;
 	private int[][] field = new int[4][4];
-	private int turn = 0;
+	private int turn;
 	private String move;
 	private String instruction;
 	private boolean instructionValid;
@@ -22,14 +22,15 @@ public class Game {
 	public Game(Scanner input, Highscore score) {
 		inputNames(input);
 		this.score = score;
-		isTurnPlayerX = getRandomBoolean(); // Startspieler wird zufÃ¤llig
-											// ausgewÃ¤hlt
+		isTurnPlayerX = getRandomBoolean(); // Startspieler wird zufällig
+											// ausgewählt
 
 		while (session) {
 			// Eine Session besteht aus den gleichen Spielern, kann aber mehrer
 			// Spiele beinhalten.
 			gameover = false;
-			initializeField(); // Das Spielfeld wird mit Nullen aufgefÃ¼llt.
+			turn = 0;
+			initializeField(); // Das Spielfeld wird mit Nullen aufgefüllt.
 			System.out.println("\nDAS SPIEL BEGINNT...\n");
 			while (!gameover) {
 				turn++;
@@ -84,6 +85,10 @@ public class Game {
 				}
 			}
 		}
+	}
+
+	private static boolean getRandomBoolean() {
+		return Math.random() < 0.5;
 	}
 
 	public Highscore getHighscore() {
@@ -171,24 +176,36 @@ public class Game {
 
 	public void updateScore() {
 		String winner = winningPlayer();
-		for (int i = 0; i < score.size(); i++) {
-			if (score.getElem(i).getName().equals(winner)) {
-				int w = score.getElem(i).getWins();
-				w++;
-				int m = score.getElem(i).getMoves();
-				m += turn;
-				score.deleteElem(i);
-				HighscoreEntry e = new HighscoreEntry(winner, w, m);
-				score.addEntry(e);
-				if (i > 0) {
-					drawLine();
-					System.out.println("### GLÜCKWUNSCH DU HAST DEN HIGHSCORE GEKNACKT ###");
-					drawLine();
+		if (score.size() == 0) {
+			HighscoreEntry e = new HighscoreEntry(winner, 1, turn);
+			score.addEntry(e);
+		} else {
+			for (int i = 0; i < score.size(); i++) {
+				if (score.getElem(i).getName().equals(winner)) {
+					// Wenn der Name des Gewinners schon im Highscore vorhanden ist
+					// wird sein Highscore geupdatet.
+					int w = score.getElem(i).getWins();
+					w++;
+					int m = score.getElem(i).getMoves();
+					m += turn;
+					score.deleteElem(i);
+					// Der alte Eintrag wird gelöscht
+					HighscoreEntry e = new HighscoreEntry(winner, w, m);
+					score.addEntry(e);
+					// und der veränderte hinzugefügt
+					if (score.indexOf(e) == 0 && i != 0) {
+						// Falls der veränderte Eintrag nun auf Position 0 und der
+						// alte Eintrag nicht auf Position 0 stand
+						drawLine();
+						System.out.println("### GLÜCKWUNSCH DU HAST DEN HIGHSCORE GEKNACKT ###");
+						drawLine();
+					}
+					break;
+				} else if (i == score.size() - 1) {
+					HighscoreEntry e = new HighscoreEntry(winner, 1, turn);
+					score.addEntry(e);
+					break;
 				}
-			} else if (i == score.size() - 1) {
-				HighscoreEntry e = new HighscoreEntry(winner, 1, turn);
-				score.addEntry(e);
-				break;
 			}
 		}
 		score.printHighscore();
@@ -206,6 +223,7 @@ public class Game {
 	}
 
 	private void inputMove(Scanner input) {
+		// Es wird so lange ein Zug eingegeben, bis dieser gültig ist.
 		do {
 			System.out.print("\nBitte gib deinen Zug ein: ");
 			move = input.next();
@@ -218,6 +236,9 @@ public class Game {
 	}
 
 	private boolean validMove(String move) {
+		// Besteht die Eingabe nicht aus genau zwei Zeichen und einem Buchstaben als
+		// erstes Zeichen und einer Zahl als zweites Zeichen, wird die Eingabe
+		// wiederholt.
 		if (move.length() == 2) {
 			String letter;
 			int j;
@@ -247,8 +268,9 @@ public class Game {
 				i = -1;
 				break;
 			}
-			// System.out.println(i+" "+j);
 			if (i >= 0 && i < 4 && j < 4 && field[i][j] == 0) {
+				// Wenn Buchstabe und Zahl gültig und das Feld noch frei ist
+				// wird das Feld mit Kreis bzw. Kreuz belegt.
 				if (isTurnPlayerX) {
 					field[i][j] = 1;
 				} else {
@@ -268,11 +290,6 @@ public class Game {
 		namePlayerX = input.next();
 		System.out.print("Bitte gebe den Namen von Kreis ein: ");
 		namePlayerO = input.next();
-
-	}
-
-	private boolean getRandomBoolean() {
-		return Math.random() < 0.5;
 	}
 
 	public void outputField() {

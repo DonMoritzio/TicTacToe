@@ -36,14 +36,14 @@ public class Highscore {
 		}
 		int j = list.size();
 		for (int i = 0; i < j; i++) {
+			System.out.println(i + " " + j);
 			if (list.get(i).getWins() < e.getWins()) {
 				list.add(i, e);
-				System.out.println("Test");
 				break;
 			} else if (list.get(i).getWins() == e.getWins() && list.get(i).getMoves() > e.getMoves()) {
 				list.add(i, e);
 				break;
-			} else if (i == list.size()) {
+			} else if (i == list.size() - 1) {
 				list.add(e);
 			}
 		}
@@ -69,8 +69,7 @@ public class Highscore {
 			FileWriter fileWriter = new FileWriter(fileName);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			for (int i = 0; i < list.size(); i++) {
-				bufferedWriter
-						.write(list.get(i).getName() + "\t" + list.get(i).getWins() + "\t" + list.get(i).getMoves());
+				bufferedWriter.write(list.get(i).getName() + "\t" + list.get(i).getWins() + "\t" + list.get(i).getMoves());
 				bufferedWriter.newLine();
 			}
 			bufferedWriter.close();

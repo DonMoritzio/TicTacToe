@@ -175,6 +175,7 @@ public class Game {
 			System.out.println("Test " + i);
 			if (score.getElem(i).getName().equals(winner)) {
 				int w = score.getElem(i).getWins();
+				System.out.println("help");
 				w++;
 				int m = score.getElem(i).getMoves();
 				m += turn;
@@ -193,6 +194,7 @@ public class Game {
 			}
 		}
 		score.printHighscore();
+		score.saveHighscore();
 	}
 
 	private String winningPlayer() {

@@ -52,31 +52,37 @@ public class Game {
 					System.out.println(namePlayerO + ", Du bist an der Reihe:");
 				}
 				// Testeingabe
-				// field[0][3] = 1;
-				// turn++;
-				// field[1][2] = 1;
-				// turn++;
-				// field[2][1] = 1;
-				// turn++;
-				// field[3][0] = 1;
-				// turn++;
-				// field[2][0] = 1;
+				field[0][0] = 1;
+				turn++;
+				// field[0][1] = -1;
+				turn++;
+				field[2][1] = 1;
+
+				field[2][2] = -1;
+				turn++;
+				field[3][0] = 1;
+
+				field[3][1] = -1;
+				turn++;
+				field[1][2] = 1;
+				field[1][1] = -1;
 				// field[3][0] = 1;
 
 				outputField();
 				inputMove(input);
 
-				check();
+				checkWin();
+				checkDraw2();
 				// Überprüft, ob Spiel gewonnen
 
 				isTurnPlayerX = !isTurnPlayerX;
-				if (turn >= 15) {
-					// Wenn alle Felder belegt sind und es keinen Gewinner gibt
-					// -> unentschieden
-					gameover = true;
-					outputField();
-					System.out.println("Unentschieden");
-				}
+				// if (turn >= 15) {
+				// // Wenn alle Felder belegt sind und es keinen Gewinner gibt
+				// // -> unentschieden
+				// gameover = true;
+				// outputField();
+				// System.out.println("UnentschiedenKo");
+				// }
 			}
 			// Wenn das Spiel beendet ist, wird Interaktion vom Spieler
 			// gefordert.
@@ -100,6 +106,92 @@ public class Game {
 		}
 	}
 
+	private void checkDraw() {
+		boolean draw = true;
+		int setTo; // 1 = Kreuz, -1 = Kreis, 0 = ungesetzt
+		for (int i = 0; i < 4; i++) {
+			setTo = 0;
+			if (!draw) {
+				break;
+			}
+			for (int j = 0; j < 4; j++) {
+				if (field[i][j] == 1 && setTo == 0) {
+					setTo = 1;
+					// Wenn Kreuz zum ersten Mal in der Reihe vorkommt,
+					// wird setTo auf Kreuz gesetzt.
+				} else if (field[i][j] == 1 && setTo == -1) {
+					break;
+					// Wenn Kreuz vorkommt, aber schon Kreis vorher in der Reihe
+					// vorhanden war, kann in dieser Reihe kein Gewinn mehr
+					// erzielt werden.
+				} else if (field[i][j] == -1 && setTo == 0) {
+					setTo = -1;
+					// Wenn Kreis zum ersten Mal in der Reihe vorkommt,
+					// wird setTo auf Kreis gesetzt.
+				} else if (field[i][j] == -1 && setTo == 1) {
+					break;
+					// Wenn Kreis vorkommt, aber schon Kreuz vorher in der Reihe
+					// vorhanden war, kann in dieser Reihe kein Gewinn mehr
+					// erzielt werden.
+				}
+				if (j >= 3) {
+					draw = false;
+					System.out.println("kein");
+					break;
+				}
+			}
+		}
+
+		if (draw) {
+			gameover = true;
+			System.out.println("Unentschieden");
+		}
+
+	}
+
+	private void checkDraw2() {
+		boolean Xhor;
+		boolean Ohor;
+		boolean Xver;
+		boolean Over;
+		boolean draw = true;
+		boolean diag1 = false;
+		boolean diag2 = false;
+		for (int i = 0; i < 4; i++) {
+			if (!draw) {
+				break;
+			}
+			Ohor = false;
+			Xhor = false;
+			Over = false;
+			Xver = false;
+			// if(field[i][i] == )
+			for (int j = 0; j < 4; j++) {
+				if (field[i][j] == -1) {
+					Ohor = true;
+				} else if (field[i][j] == 1) {
+					Xhor = true;
+				}
+				if (field[j][i] == -1) {
+					Over = true;
+				} else if (field[j][i] == 1) {
+					Xver = true;
+				}
+
+				if (j >= 3 && !(Ohor && Xhor)) {
+					draw = false;
+				} else if (j >= 3 && !(Over && Xver)) {
+					draw = false;
+				} else if (j >= 3 && (diag1 || diag2)) {
+
+				}
+			}
+		}
+		if (draw) {
+			System.out.println("unentschieden");
+		}
+	}
+
 	private static boolean getRandomBoolean() {
 		return Math.random() < 0.5;
 	}
@@ -117,7 +209,7 @@ public class Game {
 		}
 	}
 
-	private void check() {
+	private void checkWin() {
 		// horizontal
 		for (int i = 0; i < 4; i++) {
 			if (field[i][0] == 0) {

@@ -52,49 +52,42 @@ public class Game {
 					System.out.println(namePlayerO + ", Du bist an der Reihe:");
 				}
 				// Testeingabe
-				field[0][0] = 1;
-				turn++;
+				// field[0][0] = 1;
+				// turn++;
 				// field[0][1] = -1;
-				turn++;
-				field[2][1] = 1;
-
-				field[2][2] = -1;
-				turn++;
-				field[3][0] = 1;
-
-				field[3][1] = -1;
-				turn++;
-				field[1][2] = 1;
-				field[1][1] = -1;
+				// turn++;
+				// field[2][1] = 1;
+				// field[2][2] = -1;
+				// turn++;
 				// field[3][0] = 1;
+				// field[3][1] = -1;
+				// turn++;
+				// field[1][2] = 1;
+				// field[1][1] = -1;
+				// field[3][0] = 1;
+				// field[1][0] = -1;
+				//
+				// field[0][3] = -1;
 
 				outputField();
 				inputMove(input);
-
 				checkWin();
-				checkDraw2();
+				checkDraw();
 				// Überprüft, ob Spiel gewonnen
 
 				isTurnPlayerX = !isTurnPlayerX;
-				// if (turn >= 15) {
-				// // Wenn alle Felder belegt sind und es keinen Gewinner gibt
-				// // -> unentschieden
-				// gameover = true;
-				// outputField();
-				// System.out.println("UnentschiedenKo");
-				// }
 			}
 			// Wenn das Spiel beendet ist, wird Interaktion vom Spieler
 			// gefordert.
 			instructionValid = false;
 			while (!instructionValid) {
-				System.out.println("\nMöchtet Ihr eine Revanche [R] ein Neues Spiel [N] oder Beenden [B]?");
+				System.out.println("\nMöchtet Ihr eine Revanche [R], ins  Menu [M] oder Beenden [B]?");
 				instruction = input.next().toUpperCase();
 				if (instruction.equals("B")) {
 					instructionValid = true;
 					input.close();
 					System.exit(0);
-				} else if (instruction.equals("N")) {
+				} else if (instruction.equals("M")) {
 					instructionValid = true;
 					session = false;
 				} else if (instruction.equals("R")) {
@@ -105,7 +98,6 @@ public class Game {
 			}
 		}
 	}
-
 
 	private static boolean getRandomBoolean() {
 		return Math.random() < 0.5;
@@ -209,6 +201,69 @@ public class Game {
 					winMessage();
 				}
 			}
+		}
+	}
+
+	private void checkDraw() {
+		boolean Xhor;
+		boolean Ohor;
+		boolean Xver;
+		boolean Over;
+		boolean draw = true;
+		boolean Xdiag1 = false;
+		boolean Xdiag2 = false;
+		boolean Odiag1 = false;
+		boolean Odiag2 = false;
+
+		for (int i = 0; i < 4; i++) {
+			if (!draw) {
+				break;
+			}
+
+			Ohor = false;
+			Xhor = false;
+			Over = false;
+			Xver = false;
+
+			if (field[i][i] == -1) {
+				Odiag1 = true;
+			} else if (field[i][i] == 1) {
+				Xdiag1 = true;
+			}
+			if (field[i][3 - i] == -1) {
+				Odiag2 = true;
+			} else if (field[i][3 - i] == 1) {
+				Xdiag2 = true;
+			}
+			if (i >= 3 && !(Odiag1 && Xdiag1)) {
+				draw = false;
+				System.out.println("JA");
+			} else if (i >= 3 && !(Odiag2 && Xdiag2)) {
+				draw = false;
+			}
+			for (int j = 0; j < 4; j++) {
+				if (field[i][j] == -1) {
+					Ohor = true;
+				} else if (field[i][j] == 1) {
+					Xhor = true;
+				}
+				if (field[j][i] == -1) {
+					Over = true;
+				} else if (field[j][i] == 1) {
+					Xver = true;
+				}
+
+				if (j >= 3 && !(Ohor && Xhor)) {
+					draw = false;
+				} else if (j >= 3 && !(Over && Xver)) {
+					draw = false;
+				}
+			}
+		}
+		if (draw) {
+			System.out.println("Unentschieden");
+			gameover = true;
+			outputField();
 		}
 	}
 

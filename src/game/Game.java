@@ -265,7 +265,7 @@ public class Game {
 			}
 		}
 		if (draw) {
-			System.out.println("Unentschieden");
+			System.out.println("Unentschieden\n");
 			gameover = true;
 			outputField();
 		}

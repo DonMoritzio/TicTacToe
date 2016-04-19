@@ -205,6 +205,10 @@ public class Game {
 	}
 
 	private void checkDraw() {
+		// Wenn in einer Reihe, Spalte oder einer der beiden Diagonalen
+		// O und X gefunden werden, ist in dieser Spalte kein Gewinn mehr möglich.
+		// Ist dies irgendwo auf dem Brett jedoch noch nicht der Fall,
+		// so ist noch kein unentschieden vorhanden.
 		boolean Xhor;
 		boolean Ohor;
 		boolean Xver;

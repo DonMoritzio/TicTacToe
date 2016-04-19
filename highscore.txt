@@ -1,6 +1,4 @@
 Max	4	28
 Michi	3	20
-Manu	1	7
-Peter	1	7
 Karo	1	8
-p	1	9
+
